@@ -1,8 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>File Browser</title>
-  <script src="https://cdn.jsdelivr.net/npm/github-api@3.3.0/dist/GitHub.bundle.min.js"></script>
+  <title>reynep.github.io</title>
   <style>
     body { font-family: Arial; margin: 20px; }
     a { color: #0366d6; text-decoration: none; }
@@ -12,42 +11,12 @@
 </head>
 <body>
   <h1>Files in Repository</h1>
-  <ul id="file-list"></ul>
-
-<script>
-    const repo = "REYNEP/reynep.github.io";
-    const list = document.getElementById("file-list");
-    const isLocal = window.location.protocol === 'file:';
-    const baseUrl = isLocal ? 'https://reynep.github.io/' : '/';
-
-    fetch(`https://api.github.com/repos/${repo}/contents/`)
-      .then(response => response.json())
-      .then(data => {
-        data.forEach(item => {
-          if (item.type === "dir" || item.name === "index.html") return;
-
-          const li = document.createElement("li");
-          const a = document.createElement("a");
-          
-          // Remove .html extension and create proper URL
-          const cleanName = item.name.replace(/\.html$/, "");
-          a.href = baseUrl + cleanName;
-          
-          a.textContent = cleanName;
-          
-          const icon = document.createElement("span");
-          icon.textContent = "📄 ";
-          li.prepend(icon);
-          
-          li.appendChild(a);
-          list.appendChild(li);
-        });
-      })
-      .catch(error => {
-        list.innerHTML = "<li>Error loading file list. Please visit the <a href='https://github.com/REYNEP/reynep.github.io'>GitHub repository</a> directly.</li>";
-        console.error("Fetch error:", error);
-      });
-</script>
-
+  <ul>
+    <li>📄 <a href="20.mar21_Blender">20.mar21_Blender</a></li>
+    <li>📄 <a href="20.mar21_BlenderEXT">20.mar21_BlenderEXT</a></li>
+    <li>📄 <a href="PZ/reyFix2">PZ/reyFix2</a></li>
+    <li>📄 <a href="amVK_Guide/THEGUIDE_V0.1alpha">amVK_Guide/THEGUIDE_V0.1alpha</a></li>
+    <li>📄 <a href="BRAC.CourseList/web">BRAC.CourseList\web</a></li>
+  </ul>
 </body>
 </html>

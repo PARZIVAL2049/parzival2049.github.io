@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Double Major / B.Sc. in Mathematics</title>
+<style>
+  body { 
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif; 
+    font-size: 13pt; 
+    background-color: #f9f9f9; 
+    margin: 0; padding: 20px; 
+  }
+
+  h1 { 
+    text-align: center; 
+    font-size: 24pt; 
+    font-weight: bold; 
+    color: #2c3e50; 
+    margin-bottom: 20px; 
+  }
+
+  table { 
+    width: 90%; 
+    margin: 0 auto 40px; 
+    border-collapse: collapse; 
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    border-radius: 10px;
+    overflow: hidden;
+  }
+
+  thead { background-color: #2980b9; color: white; }
+  thead th { 
+    padding: 12px; 
+    cursor: pointer; 
+    font-weight: bold;
+    text-align: left;
+  }
+
+  tbody td { 
+    padding: 10px; 
+    border-bottom: 1px solid #ddd; 
+  }
+
+  tbody tr:nth-child(even) { background-color: #f2f2f2; }
+  tbody tr:hover { background-color: #d0e7ff; }
+
+  th:hover { background-color: #3498db; }
+</style>
+</head>
+
+
+
+
+
+
+
+
+
+
+<body>
+<!-- 1 -->
+<h1>Double Major / B.Sc. in Mathematics</h1>
+<table id="MathMajor">
+  <thead>
+    <tr>
+      <th>Category</th>
+      <th>Code</th>
+      <th>Name</th>
+    </tr>
+  </thead>
+  <tbody></tbody>
+</table>
+
+<!-- 2 -->
+<h1>Double Major / B.Sc. in Physics</h1>
+<table id="PhysicsMajor">
+  <thead>
+    <tr>
+      <th>Category</th>
+      <th>Code</th>
+      <th>Name</th>
+    </tr>
+  </thead>
+  <tbody></tbody>
+</table>
+
+<!-- 3 -->
+<h1>Double Major / B.Sc. in Applied Physics</h1>
+<table id="AppliedPhysicsMajor">
+  <thead>
+    <tr>
+      <th>Category</th>
+      <th>Code</th>
+      <th>Name</th>
+    </tr>
+  </thead>
+  <tbody></tbody>
+</table>
+
+<!-- 4 -->
+<h1>Double Major / B.Sc. in CompSci</h1>
+<table id="CompSciMajor">
+  <thead>
+    <tr>
+      <th>Category</th>
+      <th>Code</th>
+      <th>Name</th>
+    </tr>
+  </thead>
+  <tbody></tbody>
+</table>
+
+<script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
+<script>
+// Map CSV file names to table IDs
+const csvFiles = {
+  "BRAC.Math.Major.csv": "MathMajor",
+  "BRAC.Physics.Major.csv": "PhysicsMajor",
+  "BRAC.AppliedPhysics.Major.csv": "AppliedPhysicsMajor",
+  "BRAC.CompSci.Major.csv": "CompSciMajor"
+};
+
+// Load each CSV automatically
+Object.keys(csvFiles).forEach(fileName => {
+  fetch(fileName)
+    .then(response => response.text())
+    .then(csvText => {
+      const data = Papa.parse(csvText, { header: true, skipEmptyLines: true }).data;
+      populateTable(csvFiles[fileName], data);
+    })
+    .catch(err => console.error(`Error loading ${fileName}:`, err));
+});
+
+// Populate table with data
+function populateTable(tableId, data) {
+  const tbody = document.querySelector(`#${tableId} tbody`);
+  tbody.innerHTML = "";
+  data.forEach(row => {
+    const tr = document.createElement("tr");
+    tr.innerHTML = `<td>${row.Category}</td><td>${row.Code}</td><td>${row.Name}</td>`;
+    tbody.appendChild(tr);
+  });
+}
+
+// Sort table
+function sortTable(colIndex, tableId) {
+  const table = document.getElementById(tableId);
+  const tbody = table.tBodies[0];
+  const rowsArray = Array.from(tbody.rows);
+  let asc = tbody.getAttribute('data-sort-dir') !== 'asc';
+
+  rowsArray.sort((a, b) => {
+    const x = a.cells[colIndex].innerText.toLowerCase();
+    const y = b.cells[colIndex].innerText.toLowerCase();
+    return asc ? x.localeCompare(y) : y.localeCompare(x);
+  });
+
+  rowsArray.forEach(row => tbody.appendChild(row));
+  tbody.setAttribute('data-sort-dir', asc ? 'asc' : 'desc');
+}
+
+// Add click sorting for all tables
+document.querySelectorAll('table').forEach(table => {
+  table.querySelectorAll('th').forEach((th, idx) => {
+    th.onclick = () => sortTable(idx, table.id);
+  });
+});
+
+// Global search across all tables
+const searchInput = document.createElement("input");
+searchInput.type = "text";
+searchInput.placeholder = "Search courses...";
+searchInput.style.display = "block";
+searchInput.style.margin = "0 auto 20px";
+searchInput.style.width = "50%";
+searchInput.style.padding = "8px 12px";
+searchInput.style.fontSize = "12pt";
+searchInput.style.borderRadius = "5px";
+searchInput.style.border = "1px solid #ccc";
+document.body.insertBefore(searchInput, document.body.firstChild);
+
+searchInput.addEventListener('input', function() {
+  const filter = this.value.toLowerCase();
+  document.querySelectorAll('table tbody').forEach(tbody => {
+    tbody.querySelectorAll('tr').forEach(row => {
+      row.style.display = row.innerText.toLowerCase().includes(filter) ? '' : 'none';
+    });
+  });
+});
+</script>
+</body>
+</html>

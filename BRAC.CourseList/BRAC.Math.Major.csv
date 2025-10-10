@@ -1,0 +1,58 @@
+Category,Code,Name
+BSc.Math,xxx,Take 27 Credits outside of Core/Elective/GenEd
+BSc.Math,MAT111,Principles of Mathematics
+,,
+Core,MAT121,Basic Algebra
+Core,MAT122,Analytical and Vector Geometry
+Core,MAT123,Calculus I
+Core,MAT211,Calculus II
+Core,MAT212,Linear Algebra
+Core,MAT221,Real Analysis I
+Core,MAT222,Differential Equations I
+Core,MAT223,Numerical Analysis I
+Core,MAT311,Abstract Algebra
+Core,MAT312,Numerical Analysis II
+Core,MAT314,Complex Analysis
+Core,MAT321,Real Analysis II
+Core,MAT322,Differential Equations II
+Core,MAT323,Dynamical Systems
+Core,MAT324,Graph Theory
+Core,MAT325,Mathematical Methods
+,,
+Lab,MAT250,Mathematics Lab I
+Lab,MAT350,Mathematics Lab II
+Thesis,MAT400,Project/Thesis
+,,
+Elective + BSc.Math,MAT124,Scientific Programming
+Elective,CSE220,Data Structures
+Elective,CSE221,Algorithms
+,,
+Elective,MAT203,Matrices Linear Algebra & Differential Equations
+Elective,MAT313,Differential Geometry
+Elective,MAT316,Operations Research I
+Elective,MAT326,Hydrodynamics
+Elective,MAT411,Topology
+Elective,MAT415,Finite Element Methods
+Elective,MAT416,Tensor Calculus
+Elective,MAT421,Fluid Mechanics
+Elective,MAT422,Theory of Numbers
+Elective,MAT423,Mathematical Modeling
+Elective,MAT424,Operations Research II
+Elective,MAT425,Advanced Numerical Methods
+Elective,MAT456,Topics in Combinatorics(Sakal Roy)
+,,
+Elective,PHY112,Principles of Physics II
+Elective,PHY204,Classical Mechanics and Special Theory of Relativity
+Elective,PHY205,Statistical Mechanics
+Elective,PHY303,Quantum Mechanics I
+Elective,PHY413,General Theory of Relativity
+Elective,STA301,Modern Probability Theory & Stochastic Processes
+,,
+GenEd (BSc),BIO101,Introduction to Biology
+GenEd (BSc),CSE110,Programming Language I
+GenEd (BSc),DEV101,Bangladesh Studies
+GenEd (BSc),ENG091,Foundation Course (Non-credit)
+GenEd (BSc),ENG101,English Fundamentals *
+GenEd (BSc),ENG102,Composition I *
+GenEd (BSc),HUM103,Ethics and Culture
+GenEd (BSc),PHY111,Principles of Physics I
