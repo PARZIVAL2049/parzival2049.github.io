@@ -4,47 +4,61 @@
 <meta charset="UTF-8">
 <title>Double Major / B.Sc. in Mathematics</title>
 <style>
-  body { 
-    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif; 
-    font-size: 13pt; 
-    background-color: #f9f9f9; 
-    margin: 0; padding: 20px; 
-  }
+    body { 
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif; 
+        font-size: 13pt; 
+        background-color: #f9f9f9; 
+        margin: 0; padding: 20px; 
+    }
 
-  h1 { 
-    text-align: center; 
-    font-size: 24pt; 
-    font-weight: bold; 
-    color: #2c3e50; 
-    margin-bottom: 20px; 
-  }
+    h1 { 
+        text-align: center; 
+        font-size: 24pt; 
+        font-weight: bold; 
+        color: #2c3e50; 
+        margin-bottom: 20px; 
+    }
 
-  table { 
-    width: 90%; 
-    margin: 0 auto 40px; 
-    border-collapse: collapse; 
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-    border-radius: 10px;
-    overflow: hidden;
-  }
+    table { 
+        width: 90%; 
+        margin: 0 auto 40px; 
+        border-collapse: collapse; 
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        border-radius: 10px;
+        overflow: hidden;
+    }
 
-  thead { background-color: #2980b9; color: white; }
-  thead th { 
-    padding: 12px; 
-    cursor: pointer; 
-    font-weight: bold;
-    text-align: left;
-  }
+    thead { background-color: #2980b9; color: white; }
+    thead th { 
+        padding: 12px; 
+        cursor: pointer; 
+        font-weight: bold;
+        text-align: left;
+    }
 
-  tbody td { 
-    padding: 10px; 
-    border-bottom: 1px solid #ddd; 
-  }
+    tbody td { 
+        padding: 10px; 
+        border-bottom: 1px solid #ddd; 
+    }
 
-  tbody tr:nth-child(even) { background-color: #f2f2f2; }
-  tbody tr:hover { background-color: #d0e7ff; }
+    tbody tr:nth-child(even) { background-color: #f2f2f2; }
+    tbody tr:hover { background-color: #d0e7ff; }
 
-  th:hover { background-color: #3498db; }
+    th {
+        position: relative;
+        user-select: none;
+    }
+
+    th::after {
+        content: '';
+        margin-left: 6px;
+        font-size: 10pt;
+        color: #fff;
+    }
+
+    th:hover {
+        background-color: #3498db;
+    }
 </style>
 </head>
 
@@ -114,10 +128,10 @@
 <script>
 // Map CSV file names to table IDs
 const csvFiles = {
-  "BRAC.Math.Major.csv": "MathMajor",
-  "BRAC.Physics.Major.csv": "PhysicsMajor",
-  "BRAC.AppliedPhysics.Major.csv": "AppliedPhysicsMajor",
-  "BRAC.CompSci.Major.csv": "CompSciMajor"
+  "https://raw.githubusercontent.com/REYNEP/reynep.github.io.resc/refs/heads/main/BRAC.CourseList/BRAC.Math.Major.csv": "MathMajor",
+  "https://raw.githubusercontent.com/REYNEP/reynep.github.io.resc/refs/heads/main/BRAC.CourseList/BRAC.Physics.Major.csv": "PhysicsMajor",
+  "https://raw.githubusercontent.com/REYNEP/reynep.github.io.resc/refs/heads/main/BRAC.CourseList/BRAC.AppliedPhysics.Major.csv": "AppliedPhysicsMajor",
+  "https://raw.githubusercontent.com/REYNEP/reynep.github.io.resc/refs/heads/main/BRAC.CourseList/BRAC.CompSci.Major.csv": "CompSciMajor"
 };
 
 // Load each CSV automatically
@@ -142,21 +156,34 @@ function populateTable(tableId, data) {
   });
 }
 
-// Sort table
+// Sort table + show arrow indicators
 function sortTable(colIndex, tableId) {
   const table = document.getElementById(tableId);
   const tbody = table.tBodies[0];
   const rowsArray = Array.from(tbody.rows);
-  let asc = tbody.getAttribute('data-sort-dir') !== 'asc';
+  let asc = tbody.getAttribute('data-sort-dir') !== 'asc' || tbody.getAttribute('data-sort-col') != colIndex;
 
+  // Sort rows
   rowsArray.sort((a, b) => {
     const x = a.cells[colIndex].innerText.toLowerCase();
     const y = b.cells[colIndex].innerText.toLowerCase();
     return asc ? x.localeCompare(y) : y.localeCompare(x);
   });
 
+  // Apply sorted rows
   rowsArray.forEach(row => tbody.appendChild(row));
+
+  // Update attributes
   tbody.setAttribute('data-sort-dir', asc ? 'asc' : 'desc');
+  tbody.setAttribute('data-sort-col', colIndex);
+
+  // Update arrows (▲ ▼)
+  table.querySelectorAll('th').forEach((th, idx) => {
+    th.innerHTML = th.innerHTML.replace(/ ▲| ▼/g, ''); // remove old arrows
+    if (idx === colIndex) {
+      th.innerHTML += asc ? ' ▲' : ' ▼';
+    }
+  });
 }
 
 // Add click sorting for all tables
@@ -165,6 +192,7 @@ document.querySelectorAll('table').forEach(table => {
     th.onclick = () => sortTable(idx, table.id);
   });
 });
+
 
 // Global search across all tables
 const searchInput = document.createElement("input");
@@ -178,6 +206,76 @@ searchInput.style.fontSize = "12pt";
 searchInput.style.borderRadius = "5px";
 searchInput.style.border = "1px solid #ccc";
 document.body.insertBefore(searchInput, document.body.firstChild);
+
+// Create Collapse / Expand All button
+const toggleButton = document.createElement("button");
+toggleButton.textContent = "Collapse All";
+toggleButton.style.display = "block";
+toggleButton.style.margin = "10px auto 25px";
+toggleButton.style.padding = "8px 16px";
+toggleButton.style.fontSize = "12pt";
+toggleButton.style.borderRadius = "5px";
+toggleButton.style.border = "1px solid #ccc";
+toggleButton.style.cursor = "pointer";
+toggleButton.style.backgroundColor = "#2980b9";
+toggleButton.style.color = "white";
+toggleButton.style.transition = "0.2s ease";
+
+toggleButton.onmouseenter = () => toggleButton.style.backgroundColor = "#3498db";
+toggleButton.onmouseleave = () => toggleButton.style.backgroundColor = "#2980b9";
+
+searchInput.insertAdjacentElement("afterend", toggleButton);
+
+// Collapse/Expand all functionality
+let allCollapsed = false;
+toggleButton.addEventListener("click", () => {
+  allCollapsed = !allCollapsed;
+  document.querySelectorAll(".major-toggle").forEach(btn => {
+    const table = document.getElementById(btn.dataset.table);
+    table.style.display = allCollapsed ? "none" : "";
+    btn.textContent = allCollapsed ? "Show Courses" : "Hide Courses";
+  });
+  toggleButton.textContent = allCollapsed ? "Expand All" : "Collapse All";
+});
+
+// Add individual "Show / Hide" buttons for each table
+document.querySelectorAll("h1").forEach(h1 => {
+  const title = h1.textContent.trim();
+  if (title.startsWith("Double Major")) {
+    const table = h1.nextElementSibling;
+    if (table && table.tagName === "TABLE") {
+      const indivBtn = document.createElement("button");
+      indivBtn.textContent = "Hide Courses";
+      indivBtn.className = "major-toggle";
+      indivBtn.dataset.table = table.id;
+      indivBtn.style.display = "block";
+      indivBtn.style.margin = "10px auto 20px";
+      indivBtn.style.padding = "6px 12px";
+      indivBtn.style.fontSize = "11pt";
+      indivBtn.style.borderRadius = "5px";
+      indivBtn.style.border = "1px solid #ccc";
+      indivBtn.style.cursor = "pointer";
+      indivBtn.style.backgroundColor = "#5dade2";
+      indivBtn.style.color = "white";
+      indivBtn.style.transition = "0.2s ease";
+
+      indivBtn.onmouseenter = () => indivBtn.style.backgroundColor = "#7fbff3";
+      indivBtn.onmouseleave = () => indivBtn.style.backgroundColor = "#5dade2";
+
+      // Add click toggle
+      indivBtn.addEventListener("click", () => {
+        const tbl = document.getElementById(indivBtn.dataset.table);
+        const isHidden = tbl.style.display === "none";
+        tbl.style.display = isHidden ? "" : "none";
+        indivBtn.textContent = isHidden ? "Hide Courses" : "Show Courses";
+      });
+
+      // Insert it between <h1> and <table>
+      h1.insertAdjacentElement("afterend", indivBtn);
+    }
+  }
+});
+
 
 searchInput.addEventListener('input', function() {
   const filter = this.value.toLowerCase();
